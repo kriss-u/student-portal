@@ -1,0 +1,67 @@
+version: "3"
+
+services:
+  portal-app:
+    container_name: portal-app
+    build:
+      ./portal-app
+    restart: on-failure
+    depends_on:
+      - graphql-server
+    environment:
+      SERVER_PORT: ${PORTAL_APP_PORT}
+    ports:
+      - ${PORTAL_APP_PORT}:${PORTAL_APP_PORT}
+    volumes:
+      - ./portal-app:/usr/app/portal-app
+
+    command: ["yarn", "run", "dev"]
+
+
+
+  graphql-server:
+    container_name: graphql-server
+    build:
+      ./graphql-server
+    restart: on-failure
+    expose:
+      - ${GRAPHQL_SERVER_PORT}
+    depends_on:
+      - mongo
+    environment:
+      GRAPHQL_SERVER_PORT: ${GRAPHQL_SERVER_PORT}
+    ports:
+      - ${GRAPHQL_SERVER_PORT}:${GRAPHQL_SERVER_PORT}
+    volumes:
+      - ./graphql-server:/usr/app/graphql-server
+
+    command: ["yarn", "run", "dev"]
+
+
+  mongo:
+    container_name: graphqlmongo
+    image: mongo:4
+    restart: on-failure
+    expose:
+      - ${ME_CONFIG_MONGODB_PORT}
+    environment:
+      GRAPHQL_MONGO_PORT: ${GRAPHQL_MONGO_PORT}
+    ports:
+      - ${GRAPHQL_MONGO_PORT}:${ME_CONFIG_MONGODB_PORT}
+    volumes:
+      - ./data:/data/db
+
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    restart: on-failure
+    depends_on:
+      - mongo
+
+    environment:
+      ME_CONFIG_MONGODB_PORT: ${ME_CONFIG_MONGODB_PORT}
+      ME_CONFIG_MONGO_SERVER: ${ME_CONFIG_MONGO_SERVER}
+
+    ports:
+      - ${MONGO_EXPRESS_PORT}:8081
