@@ -2,20 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const classNames = [
-    'ONE',
-    'TWO',
-    'THREE',
-    'FOUR',
-    'FIVE',
-    'SIX',
-    'SEVEN',
-    'EIGHT',
-    'NINE',
-    'TEN'
-];
-
-const StudentSchema = new Schema({
+const TeacherSchema = new Schema ({
     firstName: {
         type: String,
         set: v => v.charAt(0).toUpperCase() + v.slice(1).toLowerCase(),
@@ -36,10 +23,9 @@ const StudentSchema = new Schema({
             message: props => `${props.value} is not a valid email.`
         }
     },
-    class: {type: String, enum: [...classNames]},
 });
 
-StudentSchema
+TeacherSchema
     .virtual('name',)
     .get(function () {
         return this.firstName + ' ' + this.lastName;
@@ -49,6 +35,6 @@ StudentSchema
         this.lastName = v.substr(v.indexOf(' ') + 1);
     });
 
-const Student = mongoose.model('Student', StudentSchema);
+const Student = mongoose.model('Teacher', TeacherSchema);
 
 module.exports = Student;
