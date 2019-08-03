@@ -11,7 +11,7 @@ services:
     environment:
       SERVER_PORT: ${PORTAL_APP_PORT}
     ports:
-      - ${PORTAL_APP_PORT}:${PORTAL_APP_PORT}
+      - ${PORTAL_APP_PORT}:3000
     volumes:
       - ./portal-app:/usr/app/portal-app
 

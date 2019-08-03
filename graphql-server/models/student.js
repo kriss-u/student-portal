@@ -15,6 +15,12 @@ const classNames = [
     'TEN'
 ];
 
+const genders = [
+    'MALE',
+    'FEMALE',
+    'OTHER'
+];
+
 const StudentSchema = new Schema({
     firstName: {
         type: String,
@@ -26,9 +32,17 @@ const StudentSchema = new Schema({
         set: v => v.charAt(0).toUpperCase() + v.slice(1).toLowerCase(),
         required: [true, 'You must enter last name']
     },
+    gender: {
+        type: String,
+        required: true,
+        uppercase: true,
+        enum: [...genders]
+    },
     email: {
         type: String,
         lowercase: true,
+        required: true,
+        unique: true,
         validate: {
             validator: function (v) {
                 return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v)
@@ -36,11 +50,42 @@ const StudentSchema = new Schema({
             message: props => `${props.value} is not a valid email.`
         }
     },
-    class: {type: String, enum: [...classNames]},
+    age: {
+        type: Number,
+        required: true,
+        validate: {
+            validator: v => v >= 0,
+            message: props => `${props.value} is not a positive number`
+        }
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    phoneNumber: {
+        type: String,
+        required: true,
+        length: 10,
+        validate: {
+            validator: function (v) {
+                return !(/\D/.test(v))
+            },
+            message: props => `${props.value} is not a valid phone number.`
+        }
+    },
+    rollNumber: {
+        type: String,
+        required: true
+    },
+    class: {
+        type: String,
+        uppercase: true,
+        enum: [...classNames]
+    },
 });
 
 StudentSchema
-    .virtual('name',)
+    .virtual('name')
     .get(function () {
         return this.firstName + ' ' + this.lastName;
     })
