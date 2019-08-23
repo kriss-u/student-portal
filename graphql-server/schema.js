@@ -4,10 +4,10 @@ const {gql} = require('apollo-server-express');
 const typeDefs = gql`
     type Query {
         getStudents: [Student]
+        getPicnics: [Picnic]
+        getTeachers: [Teacher]
         getStudent(id: ID!): Student
         getTeacher(id: ID!): Teacher
-        getTeachers: [Teacher]
-        getPicnics: [Picnic]
     }
     
     type Student {
@@ -38,7 +38,7 @@ const typeDefs = gql`
         site: String!
         attendees: [PicnicAttendee!]
         attendCost: Int!
-        foodCost: FoodCost!
+        foodCost: [FoodCost!]
     }
     
     type PicnicAttendee {
@@ -47,7 +47,12 @@ const typeDefs = gql`
     }
     
     type FoodCost {
-        type: FoodType!
+        foodType: FoodType!
+        cost: Int!
+    }
+    
+    input FoodCostInput {
+        foodType: FoodType!
         cost: Int!
     }
     
@@ -72,6 +77,12 @@ const typeDefs = gql`
             mobileNumber: String!, 
             birthday: String!
         ): Teacher
+        
+        addPicnic(
+            site: String!,
+            attendCost: Int!
+            foodCost: [FoodCostInput] 
+        ): Picnic
     }
 
     enum ClassName {

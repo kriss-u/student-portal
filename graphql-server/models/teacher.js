@@ -32,6 +32,11 @@ const TeacherSchema = new Schema({
             message: props => `${props.value} is not a valid email.`
         }
     },
+    password: {
+        type: String,
+        minlength: 8,
+        required: true,
+    },
     mobileNumber: {
         type: String,
         required: true,

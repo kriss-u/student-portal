@@ -12,8 +12,10 @@ app.use(cors());
 app.use(express.json());
 
 mongoose.Promise = global.Promise;
+
+const dbService = process.env.ME_CONFIG_MONGO_SERVER || 'localhost:27017';
 // Get up default Mongoose Connection
-mongoose.connect('mongodb://mongo/student-portal', {useNewUrlParser: true});
+mongoose.connect(`mongodb://${dbService}/student-portal`, {useNewUrlParser: true});
 
 // Get the Default Connection
 const db = mongoose.connection;

@@ -12,6 +12,7 @@ const FoodCostSchema = new Schema({
         type: String,
         required: true,
         uppercase: true,
+        unique: true,
         enum: [...foodTypes]
     },
     cost: {
@@ -52,7 +53,7 @@ const PicnicSchema = new Schema({
             message: props => `${props.value} is not a positive number`
         }
     },
-    foodCost: FoodCostSchema
+    foodCost: [FoodCostSchema]
 });
 
 const Picnic = mongoose.model('Picnic', PicnicSchema);
